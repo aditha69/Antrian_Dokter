@@ -105,12 +105,18 @@ public function realtime(Request $request)
         ->select(
             'queues.queue_number',
             'queues.status',
+            'queues.dokters_id',
             'dokters.nama',
             'dokters.spesialis'
         )
         ->first();
 
+    if (!$antrian) {
+        return response()->json(['antrian' => null]);
+    }
+
     $antrianSekarang = DB::table('queues')
+        ->where('dokters_id', $antrian->dokters_id)
         ->where('status', 'dipanggil')
         ->whereDate('queue_date', date('Y-m-d'))
         ->value('queue_number');
