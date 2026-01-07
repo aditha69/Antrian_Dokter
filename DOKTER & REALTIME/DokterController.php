@@ -36,6 +36,7 @@ class DokterController extends Controller
     // Reset hanya antrian dokter ini
     DB::table('queues')
         ->where('dokters_id', $dokterId)
+        ->whereDate('queue_date', now())
         ->where('status', 'dipanggil')
         ->update(['status' => 'menunggu']);
 
@@ -43,6 +44,7 @@ class DokterController extends Controller
     DB::table('queues')
         ->where('id', $id)
         ->where('dokters_id', $dokterId)
+        ->whereDate('queue_date', now())
         ->update(['status' => 'dipanggil']);
 
     return redirect()->back();
